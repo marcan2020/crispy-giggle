@@ -25,3 +25,8 @@ $ echo test123abc456def | ./msed "test(.*)abc(.*)def" 2
 Generate payload to exploit EternalBlue in x86 by default. Add the option `-x64` to have the 64 bits version.
 
 Usage: `./autoblue.sh -lhost YOUR_IP -lport LISTENING_PORT`
+
+## nmap-ng
+Run a full tcp ports scan with nmap and then a detailed scan on all the open ports.
+
+Usage: `./nmap-ng TARGET_IP`

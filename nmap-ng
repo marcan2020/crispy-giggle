@@ -1,0 +1,19 @@
+#!/bin/sh
+
+usage()
+{
+  echo "usage: $0 TARGET_IP"
+}
+
+if [ "$#" -eq 0 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
+  usage
+  exit 0
+fi
+
+ip=$1
+mkdir -p nmap
+echo "Launching full ports scan on $ip"
+nmap -p- $ip -T4 -oN nmap/full.nmap -v
+ports=$(cat nmap/full.nmap | sed -nr "s/(\d*)\/tcp.*/\1/p" | xargs | sed "s/ /,/g")
+echo "Launching detailed scan on the following ports: $ports"
+nmap -sV -sC --version-intensity 5 -p $ports --script=vuln $ip -oN nmap/detailed.nmap
