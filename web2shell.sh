@@ -48,6 +48,7 @@ better_shell()
 
 almost_interactive_shell()
 {
+  history -c
   user=$(execute_command "whoami")
   hostname=$(execute_command "hostname")
   path=$(execute_command "pwd")
@@ -56,6 +57,7 @@ almost_interactive_shell()
     if [ "$command" == "exit" ]; then 
       break
     fi
+    history -s "$command"
     result=$(execute_command "cd $path; $command; pwd")
     command_output=$(echo -ne "$result" | head -n -1)
     if [[ -n "$command_output" ]]; then 
