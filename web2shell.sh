@@ -2,10 +2,11 @@ usage()
 {
   echo -ne \
     "First, edit the function send_payload.\n" \
-    "usage: $0 -u TARGET_URL\n"   \
+    "usage: $0 -u TARGET_URL [-i | --interactive]\n"   \
     "\techo test\n" \
     "\ttest\n"      \
-    "\texit\n"
+    "\texit\n"      \
+    "\tBye\n"
 }
 
 encode_command()

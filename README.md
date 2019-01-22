@@ -20,7 +20,6 @@ For multiple matching group use:
 $ echo test123abc456def | ./msed "test(.*)abc(.*)def" 2
 456
 ```
-
 ## autoblue
 Generate payload to exploit EternalBlue in x86 by default. Add the option `-x64` to have the 64 bits version.
 
@@ -30,3 +29,9 @@ Usage: `./autoblue.sh -lhost YOUR_IP -lport LISTENING_PORT`
 Run a full tcp ports scan with nmap and then a detailed scan on all the open ports.
 
 Usage: `./nmap-ng TARGET_IP`
+
+## Web2Shell
+Convert a web shell into an interactive shell (almost).
+
+First, edit the function send\_payload.
+Usage: `./web2shell.sh -u TARGET_URL [-i | --interactive]`
