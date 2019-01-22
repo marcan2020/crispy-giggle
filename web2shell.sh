@@ -59,7 +59,7 @@ almost_interactive_shell()
       break
     fi
     history -s "$command"
-    result=$(execute_command "cd $path; $command; pwd")
+    result=$(execute_command "cd $path; $command 2>&1; pwd")
     command_output=$(echo -ne "$result" | head -n -1)
     if [[ -n "$command_output" ]]; then 
       echo -e "$command_output" >&2
