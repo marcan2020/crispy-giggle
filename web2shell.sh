@@ -42,7 +42,7 @@ better_shell()
       break
     fi
     result=$(execute_command "$command")
-    printf "$result\\n"
+    echo -e "$result" >&2
   done
 }
 
@@ -52,15 +52,14 @@ almost_interactive_shell()
   hostname=$(execute_command "hostname")
   path=$(execute_command "pwd")
   while :; do
-    printf "$user@$hostname:$path$ "
-    read -e command
+    read -ep "$user@$hostname:$path$ " command
     if [ "$command" == "exit" ]; then 
       break
     fi
     result=$(execute_command "cd $path; $command; pwd")
     command_output=$(echo -ne "$result" | head -n -1)
     if [[ -n "$command_output" ]]; then 
-      printf "$command_output\\n"; 
+      echo -e "$command_output" >&2
     fi
     path=$(echo -ne "$result" | tail -n 1)
   done
