@@ -33,5 +33,5 @@ Usage: `./nmap-ng TARGET_IP`
 ## Web2Shell
 Convert a web shell into an interactive shell (almost).
 
-First, edit the function send\_payload.
+First, edit the function send\_payload and build\_payload.
 Usage: `./web2shell.sh -u TARGET_URL [-i | --interactive]`

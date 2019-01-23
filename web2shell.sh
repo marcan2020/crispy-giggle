@@ -1,7 +1,7 @@
 usage()
 {
   echo -ne \
-    "First, edit the function send_payload.\n" \
+    "First, edit the function send_payload and build_payload.\n" \
     "usage: $0 -u TARGET_URL [-i | --interactive]\n"   \
     "\techo test\n" \
     "\ttest\n"      \
