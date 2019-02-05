@@ -36,6 +36,45 @@ execute_command()
   echo "$response"
 }
 
+build_absolute_path()
+{
+  base_path=$1
+  file_name=$2
+  full_path="$file_name"
+  if [[ "$full_path" != \/* ]]; then
+    file_name=$(echo $file_name | sed 's/^.\///')
+    full_path="$base_path/$file_name"
+  fi
+  echo "$full_path"
+}
+
+send_file()
+{
+  echo "Sending file"
+  b64=$(base64 "$local")
+  for l in $b64; do
+    out=$(execute_command "echo $l >> $remote.tmp")
+  done
+  out=$(execute_command "base64 -d $remote.tmp > $remote")
+  out=$(execute_command "rm $remote.tmp")
+  echo "File uploaded"
+}
+
+upload_file()
+{
+  remote_path=$1
+  read -ep "Local file: " local
+  read -ep "Target file: " remote
+  local=$(build_absolute_path $(pwd) "$local")
+  remote=$(build_absolute_path "$remote_path" "$remote")
+  echo "$local will be upload to $remote"
+  read -ep "Confirm (y/N) " confirm
+
+  if [[ "$confirm" == "Y" || "$confirm" == "y" ]]; then
+    send_file $local $remote
+  fi
+}
+
 better_shell()
 {
   while :; do
@@ -58,6 +97,9 @@ almost_interactive_shell()
     read -ep "$user@$hostname:$path$ " command
     if [ "$command" == "exit" ]; then 
       break
+    elif [ "$command" == "upload" ]; then
+      upload_file $path
+      continue
     fi
     history -s "$command"
     result=$(execute_command "cd $path; $command 2>&1; pwd")
