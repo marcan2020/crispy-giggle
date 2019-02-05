@@ -48,16 +48,30 @@ build_absolute_path()
   echo "$full_path"
 }
 
+compress_file()
+{
+  file=$1
+  compressed_file="$file.gz"
+  gzip -c $file > $compressed_file
+  echo $compressed_file
+}
+
+decompress_file()
+{
+  file=$1
+  out=$(execute_command "gzip -d $file")
+}
+
 send_file()
 {
-  echo "Sending file"
+  local=$1
+  remote=$2
   b64=$(base64 "$local")
   for l in $b64; do
     out=$(execute_command "echo $l >> $remote.tmp")
   done
   out=$(execute_command "base64 -d $remote.tmp > $remote")
   out=$(execute_command "rm $remote.tmp")
-  echo "File uploaded"
 }
 
 upload_file()
@@ -71,7 +85,18 @@ upload_file()
   read -ep "Confirm (y/N) " confirm
 
   if [[ "$confirm" == "Y" || "$confirm" == "y" ]]; then
-    send_file $local $remote
+    read -ep "Do you want to compress with gzip (Y/n) " compression
+    echo "Sending file"
+    if [[ "$compression" == "N" || "$compression" == "n" ]]; then
+      send_file $local $remote
+    else
+      local_compressed=$(compress_file $local)
+      remote_compressed="$remote.gz"
+      send_file $local_compressed $remote_compressed
+      decompress_file $remote_compressed
+      rm $local_compressed
+    fi
+    echo "File uploaded"
   fi
 }
 
