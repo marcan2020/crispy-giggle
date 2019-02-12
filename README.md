@@ -35,3 +35,8 @@ Convert a web shell into an interactive shell (almost).
 
 First, edit the function send\_payload and build\_payload.
 Usage: `./web2shell.sh -u TARGET_URL [-i | --interactive]`
+
+## Simple JWT
+JWT cli tool to encode or decode JSON Web Tokens.
+
+Usage: `./simple_jwt.py [encode --secret SECRET --alg ALG [--headers HEADERS] DATA | decode [--secret SECRET] TOKEN]`
