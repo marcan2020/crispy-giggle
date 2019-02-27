@@ -1,0 +1,24 @@
+#!/bin/bash
+
+usage()
+{
+  echo "usage: $0 DOMAIN.TLD -f WORD_LIST"
+  echo -e "\tBruteforce subdomains with a wordlist."
+}
+
+if [ "$#" -ne 3 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$2" != "-f" ] || [ ! -f "$3" ] ; then
+  usage
+  exit 0
+fi
+
+domain=$1
+wordlist=$3
+
+while read line;
+do
+  test="$line.$domain"
+  nslookup "$test" >/dev/null
+  if [ "$?" -eq 0 ]; then
+    echo "$test"
+  fi
+done < $wordlist
