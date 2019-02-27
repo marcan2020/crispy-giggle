@@ -13,7 +13,7 @@ fi
 ip=$1
 mkdir -p nmap
 echo "Launching full ports scan on $ip"
-nmap -p- $ip -T4 -oN nmap/full.nmap -v
-ports=$(cat nmap/full.nmap | sed -nr "s/(\d*)\/tcp.*/\1/p" | xargs | sed "s/ /,/g")
+nmap -p- $ip -T4 -oN "nmap/${ip}_full.nmap" -v
+ports=$(cat "nmap/${ip}_full.nmap" | sed -nr "s/(\d*)\/tcp.*/\1/p" | xargs | sed "s/ /,/g")
 echo "Launching detailed scan on the following ports: $ports"
-nmap -sV -sC --version-intensity 5 -p $ports --script=vuln $ip -oN nmap/detailed.nmap
+nmap -sV -sC --version-intensity 5 -p $ports --script=vuln $ip -oN "nmap/${ip}_detailed.nmap"
